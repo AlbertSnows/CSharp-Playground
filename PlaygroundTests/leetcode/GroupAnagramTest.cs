@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 
 
 namespace PlaygroundTests.leetcode;
-
+// dotnet restore
 [TestClass]
 public class GroupAnagramsTest
 {
