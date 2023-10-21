@@ -1,5 +1,6 @@
 ﻿using Playground.leetcode;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
@@ -25,30 +26,39 @@ public class GroupAnagramsTest
     public void calcGroupAnagramsTest()
     {
         var testCases = ImmutableList.Create(
-            new KeyValuePair<List<List<string>>, ImmutableList<string>>(
-                new List<List<string>> {
-                    new List<string> { "bat" },
-                    new List<string> { "nat", "tan" },
-                    new List<string> { "ate", "eat", "tea" } },
-            ImmutableList.Create( "eat", "tea", "tan", "ate", "nat", "bat" )),
-            new KeyValuePair<List<List<string>>, ImmutableList<string>>(
-                new List<List<string>> {
-                    new List<string> { "a" }},
-            ImmutableList.Create( "a" )),
-            new KeyValuePair<List<List<string>>, ImmutableList<string>>(
-                new List<List<string>> {
-                    new List<string> { "" }},
-            ImmutableList.Create( "" )));
+            (new[]{
+                new []{ "bat" },
+                new []{ "nat", "tan" },
+                new []{ "ate", "eat", "tea" } },
+                new[] { "eat", "tea", "tan", "ate", "nat", "bat" }),
+            (new[] {
+                new []{ "a" }},
+                new []{ "a" }),
+            (new[] {
+                new []{ "" }},
+                new []{ "" }));
         var expectedWithOutcome = testCases
-            .Select(pair => new KeyValuePair<
-                List<List<string>>, 
-                List<List<string>>>(
-                pair.Key,
-                GroupAnagrams.calcGroupAnagrams(pair.Value)))
+            .Select(pair => (
+                pair.Item1,
+                GroupAnagrams.calcGroupAnagrams(pair.Item2)))
             .ToList();
-        expectedWithOutcome.ForEach(pair =>
-        {
-            Assert.AreEqual(pair.Key, pair.Value);
+        expectedWithOutcome.ForEach(pair => {
+            var sortedExpected = pair.Item1
+            .Select(innerArray => innerArray.ToList())
+            .ToList()
+            ;
+            var sortedOutcome = pair.Item2
+            .OrderBy(innerArray => innerArray.Count)
+            .Select(innerArray => innerArray.OrderBy(deeperArray => deeperArray).ToList())
+            .ToList()
+            ;
+
+            foreach (var index in Enumerable.Range(0, sortedExpected.Count)) {
+                var expected = sortedExpected[index];
+                var outcome = sortedOutcome[index];
+                var areEqual = Enumerable.SequenceEqual(expected, outcome);
+                Assert.IsTrue(areEqual);
+            }
         });
     }
 }

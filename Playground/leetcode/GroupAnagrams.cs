@@ -5,7 +5,7 @@ namespace PlaygroundTests.leetcode;
 public class GroupAnagrams
 {
     public static List<List<string>> 
-        calcGroupAnagrams(ImmutableList<string> value)
+        calcGroupAnagrams(IEnumerable<string> value)
     {
         //Input: strs = ["eat", "tea", "tan", "ate", "nat", "bat"]
         //Output: [["bat"],["nat","tan"],["ate","eat","tea"]]
@@ -13,16 +13,19 @@ public class GroupAnagrams
             (frequencies, phrase) => {
                 var sortedWord = new string(phrase.OrderBy(character => character)
                     .ToArray());
-                var hasWord = frequencies.Contains(sortedWord);
+                var hasWord = frequencies.ContainsKey(sortedWord);
                 if(hasWord)
                 {
-                    frequencies.get(sortedWord).add(phrase);
+                    var list = frequencies[sortedWord];
+                    list.Add(phrase);
+                    frequencies[sortedWord] = list;
                 } else
                 {
-                    frequencies.put(sortedWord, new List<string>(phrase));
+                    frequencies.Add(sortedWord, new List<string> { phrase });
                 }
                 return frequencies;
         });
-        //throw new NotImplementedException();
+        var values = frequencies.Values.ToList();
+        return values;
     }
 }
