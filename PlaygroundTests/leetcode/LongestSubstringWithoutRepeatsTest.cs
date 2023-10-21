@@ -1,6 +1,7 @@
 ﻿using Playground.leetcode;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,11 +30,20 @@ namespace PlaygroundTests.leetcode;
 public class LongestSubstringWithoutRepeatsTest
 {
     [TestMethod]
-    public static void findLongestSubstringWithoutRepeatsTest()
+    public void FindLongestSubstringWithoutRepeatsTest()
     {
-        var input = "abcabcbb";
-        var outcome = LongestSubstringWithoutRepeats.findLongestSubstringWithoutRepeatsTest(input);
-        var expected = 3;
-        Assert.AreEqual(expected, outcome);
+        var testCases = ImmutableList.Create(
+            new KeyValuePair<int, string>(3, "abcabcbb"),
+            new KeyValuePair<int, string>(1, "bbbbb"),
+            new KeyValuePair<int, string>(3, "pwwkew"));
+        var expectedWithOutcome = testCases
+            .Select(pair => new KeyValuePair<int, int>(
+                pair.Key,
+                LongestSubstringWithoutRepeats.findLongestSubstringWithoutRepeatsTest(pair.Value)))
+            .ToList();
+        expectedWithOutcome.ForEach(pair =>
+        {
+            Assert.AreEqual(pair.Key, pair.Value);
+        });
     }
 }
