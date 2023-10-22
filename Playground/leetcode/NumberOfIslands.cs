@@ -15,7 +15,7 @@ public static class NumberOfIslands
 
         var rowIndex = 0;
         var columnIndex = 0;
-        var mapIsland = buildMapIsland(maxWidth, maxLength, grid);
+        var mapIsland = buildMapIsland(maxLength, maxWidth, grid);
         var foundIslands = 0;
         while(columnIndex < maxLength) {
             var value = grid[columnIndex][rowIndex];
@@ -26,7 +26,7 @@ public static class NumberOfIslands
             if (unvisitedIsland)
             {
                 foundIslands++;
-                visitedSquares = mapIsland(rowIndex, columnIndex, visitedSquares);
+                visitedSquares = mapIsland(columnIndex, rowIndex, visitedSquares);
             }
             if(endOfRow)
             {
@@ -41,11 +41,26 @@ public static class NumberOfIslands
     }
 
     private static Func<int, int, bool[][], bool[][]> 
-        buildMapIsland(int maxWidth, int maxLength, string[][] grid)
+        buildMapIsland(int maxLength, int maxWidth, string[][] grid)
     {
-        return (rowIndex, columnIndex, visited) =>
+        Func<int, int, bool[][], bool[][]> checkIfIsland = null; 
+        checkIfIsland = (columnIndex, rowIndex, visited) =>
         {
+            visited[columnIndex][rowIndex] = true;
+            var eastIndex = rowIndex + 1;
+            var eastOOBORWater = eastIndex == maxWidth || grid[columnIndex][eastIndex] == "0";
+            var southIndex = columnIndex + 1;
+            var southOOBORWater = southIndex == maxLength || grid[southIndex][rowIndex] == "0";
+            if(!eastOOBORWater)
+            {
+                visited = checkIfIsland(columnIndex, eastIndex, visited);
+            }
+            if(!southOOBORWater)
+            {
+                visited = checkIfIsland(southIndex, rowIndex, visited);
+            }
             return visited;
         };
+        return checkIfIsland;
     }
 }

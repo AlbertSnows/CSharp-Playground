@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PlaygroundTests.leetcode;
 [TestClass]
-internal class NumberOfIslandsTest
+public class NumberOfIslandsTest
 {
     [TestMethod]
     public void ValidateParenthesisTest()
