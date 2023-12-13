@@ -7,6 +7,8 @@ public class FindDistanceFromGraphCycle
 {
     public static int[] calcNodeDistanceFromCycle((int, int)[] graph)
     {
+        var x = new List<int>();
+        //var y = x.Reverse();
         graph = new (int, int)[]
         {
             (1, 2),
